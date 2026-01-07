@@ -1,0 +1,96 @@
+<body>
+<title>Multi URL Opener - by zsahi</title>
+<textarea id="input_urls" style="width: 100%; height: 100px;"></textarea>
+<script>
+function convert_urls() {
+    const inputArea = document.getElementById('input_urls');
+    const outputDiv = document.getElementById('outputdiv');
+
+    // Clear previous output
+    outputDiv.innerHTML = '';
+
+    const urls = inputArea.value
+        .split(/[\r\n\s]+/)
+        .map(line => line.trim())
+        .filter(line => line !== '' && /^https?:\/\//.test(line));
+
+    // Create a table and apply styles
+    const table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.borderCollapse = 'separate'; // Adjust for spacing between rows
+    table.style.borderSpacing = '0 20px'; // Increased space between rows
+
+    // Apply general font size increase
+    table.style.fontSize = '200%'; // Double the default font size
+
+    const urlCells = []; // Keep track of all URL cells
+
+    // Reset the color of all URL cells
+    function resetUrlColors() {
+        urlCells.forEach(cell => {
+            cell.style.color = 'black'; // Reset color to default
+        });
+    }
+
+    // Process the URLs in subsets of 5
+    for (let index = 0; index < urls.length; index += 5) {
+        // Get the current subset of up to 5 URLs
+        const urlSubset = urls.slice(index, index + 5);
+
+        // Add table rows for each URL in the subset
+        urlSubset.forEach((url, subsetIndex) => {
+            const row = table.insertRow(-1);
+
+            // Apply styles to each cell for the divider effect
+            const cellStyle = 'border-bottom: 1px solid #000; padding: 5px 0;'; // Solid black line and padding for visual separation
+
+            // Column 1: ID
+            const idCell = row.insertCell(0);
+            idCell.style.cssText = cellStyle;
+            idCell.textContent = index + subsetIndex + 1;
+
+            // Column 2: Open 5 URLs Button (conditionally added)
+            const multiButtonCell = row.insertCell(1);
+            multiButtonCell.style.cssText = cellStyle;
+            if (subsetIndex === 0) {
+                const multiButton = document.createElement('button');
+                multiButton.textContent = 'Open 5 URLs';
+                //multiButton.style.fontSize = '100%'; // Adjust button font size if needed
+                multiButton.onclick = () => {
+                    resetUrlColors(); // Reset colors before highlighting
+                    urlSubset.forEach((subsetUrl, i) => {
+                        window.open(subsetUrl, '_blank');
+                        urlCells[index + i].style.color = 'red'; // Highlight this subset
+                    });
+                };
+                multiButtonCell.appendChild(multiButton);
+            }
+
+            // Column 3: Open URL Button
+            const buttonCell = row.insertCell(2);
+            buttonCell.style.cssText = cellStyle;
+            const button = document.createElement('button');
+            button.textContent = 'Open URL';
+            //button.style.fontSize = '50%'; // Adjust button font size if needed
+            button.onclick = () => {
+                resetUrlColors(); // Reset colors before highlighting
+                window.open(url, '_blank');
+                urlCells[index + subsetIndex].style.color = 'red'; // Highlight this URL
+            };
+            buttonCell.appendChild(button);
+
+            // Column 4: URL
+            const urlCell = row.insertCell(3);
+            urlCell.style.cssText = cellStyle ;//+ 'width: 60%;'; // Give more space to URL column
+            urlCell.textContent = url;
+            urlCells.push(urlCell); // Track the URL cell for color changes
+        });
+    }
+
+    outputDiv.appendChild(table);
+}
+</script>
+<button id="convert_urls" name="converturls1" value="convert urls2" onclick="convert_urls()">Convert URLs</button>
+<br><br>
+<div id="outputdiv"></div>
+</body>
